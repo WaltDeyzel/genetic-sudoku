@@ -7,6 +7,7 @@ from numpy import random as npR
 from Crossover import crossover
 import time
 from inputSudoku import image_input
+from outputSudoku import image_output
 
 t = round(time.time())
 print(t)
@@ -44,15 +45,15 @@ if __name__ == "__main__":
         [0,0,0, 0,0,0, 0,2,8],
         [0,9,0, 0,0,0, 0,0,3],
         ])
-
-    problem_grid = image_input('puzzle3.png')
+    img = 'puzzle3.png'
+    problem_grid = image_input(img)
 
     
     print(problem_grid)
     population_total = 300
     mutation_rate = 0.65
     crossover_rate = 1
-    simulations = 10 * 1000
+    simulations = 1 * 10
 
     population = []
     best_genome = None
@@ -97,4 +98,5 @@ if __name__ == "__main__":
             population.append(new_genome)
         
     show(i)
+    image_output(img, best_genome.getDNA())
      
