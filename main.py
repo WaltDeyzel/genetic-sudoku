@@ -31,24 +31,25 @@ def show(i):
 
 if __name__ == "__main__":
     problem_grid = np.array([
-        [0,0,0, 2,6,0, 7,0,1],
-        [6,8,0, 0,7,0, 0,9,0],
-        [1,9,0, 0,0,4, 5,0,0],
+        [4,0,0, 6,0,0, 3,0,0],
+        [0,0,2, 8,0,0, 4,0,0],
+        [3,0,0, 5,9,0, 0,0,0],
 
-        [8,2,0, 1,0,0, 0,4,0],
-        [0,0,4, 6,0,2, 9,0,0],
-        [0,5,0, 0,0,3, 0,2,8],
+        [0,7,0, 0,0,0, 0,0,2],
+        [0,2,0, 0,3,0, 0,1,5],
+        [1,0,0, 9,0,0, 0,0,4],
 
-        [0,0,9, 3,0,0, 0,7,4],
-        [0,4,0, 0,5,0, 0,3,6],
-        [7,0,3, 0,1,8, 0,0,0],
+        [0,0,0, 1,7,0, 9,0,0],
+        [0,0,0, 0,0,0, 0,2,8],
+        [0,9,0, 0,0,0, 0,0,3],
         ])
 
     
     print(problem_grid)
-    population_total = 150
-    mutation_rate = 0.3
+    population_total = 200
+    mutation_rate = 0.35
     crossover_rate = 1
+    simulations = 10 * 1000
 
     population = []
     best_genome = None
@@ -57,7 +58,7 @@ if __name__ == "__main__":
         genome_dna = generate(problem_grid)
         population.append(Genome(genome_dna))
         
-    for i in range(100000):
+    for i in range(simulations):
         population_fitness = 0
         
         for genome in population:
@@ -67,7 +68,7 @@ if __name__ == "__main__":
         sorted_population = population.copy()
         best_genome = max(population, key=operator.attrgetter('fit'))
 
-        if i%5000 == 0:
+        if i%1000 == 0:
             show(i)
             
         if round(1/best_genome.getFitness()) <= 1:
