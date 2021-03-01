@@ -1,8 +1,6 @@
 import numpy as np
 from numpy import random as npR 
-import math
 from random import randint
-import time
 
 class Genome:
 
@@ -37,21 +35,6 @@ class Genome:
 
         for i in range(9):
             score += (9-np.unique(self.dna[:,i]).size)*100
-
-        # start_x = 0
-        # start_y = 0
-        # for r in range(3):
-        #     for c in range(3):
-        #         square = self.dna[start_y:start_y+3,start_x:start_x+3]
-        #         total = np.sum(np.sum(square))
-        #         ans[r][c] = total
-        #         score += abs(total-45)
-
-        #         start_x += 3
-        #         if start_x >= 9:
-        #             start_x = 0
-        #     start_y += 3
-        # self.square_sum = ans
         
         self.fit = 1/(score)
     

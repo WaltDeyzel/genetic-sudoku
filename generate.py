@@ -16,7 +16,6 @@ def generate(problem_grid):
 
                     if num in options:
                         options.remove(num)
-                        #print(options)
             
             for r in range(3):
                 for c in range(3):

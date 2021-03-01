@@ -1,5 +1,3 @@
-from random import randint
-import random
 from numpy import random as npR
 
 def tournamentSelection(sorted_population):

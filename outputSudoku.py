@@ -1,5 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from cv2 import cv2
 
 def image_output(image, gird):
