@@ -3,10 +3,7 @@ import numpy as np
 def generate(problem_grid):
 
     grid = problem_grid.copy()
-    #grid = np.zeros((9,9))
     
-
-
     start_x = 0
     start_y = 0
     for r in range(3):

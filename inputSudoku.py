@@ -62,29 +62,49 @@ def match_template(image, template):
 def get_number(small_image):
 
     num = get_grayscale(small_image)
-    num = remove_noise(num)
+    num = opening(num)
+    #num = remove_noise(num)
     custom_config = r'--oem 3 --psm 6 outputbase digits'
     return pytesseract.image_to_string(num, config=custom_config)[0]
 
 
 
+def image_input(path):
 
-
-
-if __name__ == '__main__':
     problem_grid = np.zeros([9,9])
+
+    img = cv2.imread(path)
+    
+    width = len(img)//9
+    size = len(img)
+    for row in range(9):
+        for col in range(9):
+
+            num = img[row*width:row*width+width, col*width:col*width+width]
+            r = int(100*(row*width)/(11*size))
+            c = int(100*(col*width)/(11*size))
+
+            number = get_number(num)
+            if number in possible_characters:
+                    problem_grid[r, c] = number
+            else:
+                problem_grid[r, c] = 0
     print(problem_grid)
+    return problem_grid
 
-    dx = 0
-    dy = 0
 
-    img = cv2.imread('puzzle.png')
+def image_input2(path):
+    problem_grid = np.zeros([9,9])
+
+    img = cv2.imread(path)
     imgGry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgGry = cv2.medianBlur(imgGry,5)
 
-    ret , thrash = cv2.threshold(imgGry, 240 , 255, cv2.CHAIN_APPROX_NONE)
-    contours , hierarchy = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    _ , thrash = cv2.threshold(imgGry, 240 , 255, cv2.CHAIN_APPROX_NONE)
+    contours , _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
+    dx = 0
+    dy = 0
 
     print(len(imgGry))
     m = len(imgGry)//9-3
@@ -95,16 +115,16 @@ if __name__ == '__main__':
         y = approx.ravel()[1] 
 
         perimeter = cv2.arcLength(contour,True)
-        #print(perimeter)
+        print(perimeter)
         
-        if len(approx) == 4 and perimeter < 510 and perimeter > 500:
+        if len(approx) == 4 and perimeter < 700 and perimeter > 200:
             x, y , w, h = cv2.boundingRect(approx)
             aspectRatio = float(w)/h
             #print(aspectRatio)
             cv2.drawContours(img, [approx], 0, (0, 0, 255), 1)
             
             
-            if aspectRatio >= 0.97 and aspectRatio < 1.016:
+            if aspectRatio >= 0.94 and aspectRatio < 1.03:
                 num = img[n-y:n-y+m, n-x:n-x+m]
                 number = get_number(num)
                 cv2.putText(img, number, (n-x, n-y+60), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
@@ -120,12 +140,11 @@ if __name__ == '__main__':
                     dx = 0
                     if dy == 9:
                         break
-            
-        
     print(problem_grid)
     cv2.imshow('shapes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    return problem_grid
 
 
 
@@ -139,3 +158,6 @@ if __name__ == '__main__':
 
     # d = pytesseract.image_to_data(img, output_type=Output.DICT)
     # print(d['text'])
+
+if __name__ == '__main__':
+    grid = image_input2('puzzle2.PNG')

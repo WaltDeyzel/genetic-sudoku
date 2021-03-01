@@ -23,7 +23,6 @@ class Genome:
 
         self.col_sum = np.sum(self.dna, axis=0)
         self.row_sum = np.sum(self.dna, axis=1)
-        #ans = np.zeros((3,3))
 
         score = 0
         for num in self.col_sum:
@@ -58,10 +57,6 @@ class Genome:
     
     def mutateSell(self, problem_grid):
 
-        #if npR.uniform() < 0.5:
-            
-        #Random row
-        # print(self.dna)
         col = 3*randint(0,2)
         row = 3*randint(0,2)
             
@@ -79,11 +74,6 @@ class Genome:
         copy = self.dna[row+r_1, col+c_1].copy()
         self.dna[row+r_1, col+c_1] = self.dna[row+r_2, col+c_2]
         self.dna[row+r_2, col+c_2] = copy
-        # print(self.dna)
-        # time.sleep(100)
-
-
-
 
 if __name__ == "__main__":
 

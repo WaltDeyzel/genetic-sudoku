@@ -1,4 +1,3 @@
-import time
 def crossover(option_1, option_2, option_3):
 
     dna_1 = option_1.getDNA()

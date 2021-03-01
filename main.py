@@ -6,6 +6,7 @@ from Selection import tournamentSelection
 from numpy import random as npR
 from Crossover import crossover
 import time
+from inputSudoku import image_input
 
 t = round(time.time())
 print(t)
@@ -44,10 +45,12 @@ if __name__ == "__main__":
         [0,9,0, 0,0,0, 0,0,3],
         ])
 
+    problem_grid = image_input('puzzle3.png')
+
     
     print(problem_grid)
-    population_total = 200
-    mutation_rate = 0.35
+    population_total = 300
+    mutation_rate = 0.65
     crossover_rate = 1
     simulations = 10 * 1000
 
