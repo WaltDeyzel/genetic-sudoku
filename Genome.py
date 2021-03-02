@@ -57,6 +57,10 @@ class Genome:
         copy = self.dna[row+r_1, col+c_1].copy()
         self.dna[row+r_1, col+c_1] = self.dna[row+r_2, col+c_2]
         self.dna[row+r_2, col+c_2] = copy
+    
+    def mutateSquare(self, problem_grid):
+        pass
+
 
 if __name__ == "__main__":
 

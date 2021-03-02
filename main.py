@@ -48,12 +48,10 @@ if __name__ == "__main__":
     img = 'puzzle3.png'
     problem_grid = image_input(img)
 
-    
-    print(problem_grid)
-    population_total = 300
-    mutation_rate = 0.65
+    population_total = 200
+    mutation_rate = 0.45
     crossover_rate = 1
-    simulations = 1 * 10
+    simulations = 100 * 1000
 
     population = []
     best_genome = None
@@ -74,14 +72,14 @@ if __name__ == "__main__":
 
         if i%1000 == 0:
             show(i)
+            #image_output(img, best_genome.getDNA())
             
         if round(1/best_genome.getFitness()) <= 1:
             print('Done')
             break
         population.clear()
-        population.append(best_genome)
+        #population.append(best_genome)
         
-
         while len(population) < population_total:
 
             new_genome = tournamentSelection(sorted_population)
