@@ -1,13 +1,13 @@
 import numpy as np 
+from numpy import random as npR
 from generate import generate
 from Genome import Genome
-import operator
 from Selection import tournamentSelection
-from numpy import random as npR
 from Crossover import crossover
-import time
 from inputSudoku import image_input
 from outputSudoku import image_output
+import time
+import operator
 
 t = round(time.time())
 print(t)
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         [0,9,0, 0,0,0, 0,0,3],
         ])
     img = 'puzzle3.png'
-    problem_grid = image_input(img)
+    # problem_grid = image_input(img)
 
     population_total = 200
     mutation_rate = 0.45
@@ -91,7 +91,7 @@ if __name__ == "__main__":
                 new_genome = Genome(dna_1)
 
             if npR.uniform() < mutation_rate:
-                new_genome.mutateSell(problem_grid)
+                new_genome.mutate(problem_grid)
 
             population.append(new_genome)
         

@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import random as npR 
 from random import randint
+from generate import populateSquare
 
 class Genome:
 
@@ -59,7 +60,23 @@ class Genome:
         self.dna[row+r_2, col+c_2] = copy
     
     def mutateSquare(self, problem_grid):
-        pass
+        
+        col = 3*randint(0,2)
+        row = 3*randint(0,2)
+            
+        problem_square = problem_grid[row:row+3, col:col+3]
+
+        square = populateSquare(problem_square)
+
+        self.dna[row:row+3, col:col+3] = square
+    
+
+    def mutate(self, problem_grid):
+
+        if npR.uniform() < 0.5:
+            self.mutateSell(problem_grid)
+        self.mutateSquare(problem_grid)
+
 
 
 if __name__ == "__main__":
