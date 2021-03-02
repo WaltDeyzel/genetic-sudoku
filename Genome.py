@@ -25,17 +25,17 @@ class Genome:
 
         score = 0
         for num in self.col_sum:
-            score += abs(num-45)**3
+            score += abs(num-45)**2
         
         for num in self.row_sum:
-            score += abs(num-45)**3
+            score += abs(num-45)**2
 
         # UNIQUE 
         for row in self.dna:
-            score += (9-np.unique(row).size)**2*100
+            score += (9-np.unique(row).size)*1000
 
         for i in range(9):
-            score += (9-np.unique(self.dna[:,i]).size)*100
+            score += (9-np.unique(self.dna[:,i]).size)*1000
         
         self.fit = 1/(score)
     

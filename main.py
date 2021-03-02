@@ -14,6 +14,7 @@ print(t)
 np.random.seed(t)
 
 def show(i):
+    print()
     print('---------------------------------------------')
     print('Gen:', i, '--> ', round(1/best_genome.getFitness()))
     dna = best_genome.getDNA()
@@ -26,8 +27,6 @@ def show(i):
     print()
     print(best_genome.col_sum)
     print(best_genome.row_sum)
-    print()
-    print(best_genome.square_sum)
     print()
     print('---------------------------------------------')
 
@@ -46,7 +45,7 @@ if __name__ == "__main__":
         [0,9,0, 0,0,0, 0,0,3],
         ])
     img = 'puzzle3.png'
-    # problem_grid = image_input(img)
+    problem_grid = image_input(img)
 
     population_total = 200
     mutation_rate = 0.45
@@ -70,7 +69,7 @@ if __name__ == "__main__":
         sorted_population = population.copy()
         best_genome = max(population, key=operator.attrgetter('fit'))
 
-        if i%1000 == 0:
+        if i%100 == 0:
             show(i)
             #image_output(img, best_genome.getDNA())
             
@@ -78,7 +77,7 @@ if __name__ == "__main__":
             print('Done')
             break
         population.clear()
-        #population.append(best_genome)
+        population.append(best_genome)
         
         while len(population) < population_total:
 
