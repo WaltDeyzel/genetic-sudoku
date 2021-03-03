@@ -8,7 +8,6 @@ from pytesseract import Output
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 possible_characters = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-
 # get grayscale image
 def get_grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -19,7 +18,7 @@ def remove_noise(image):
  
 #thresholding
 def thresholding(image):
-    return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    return cv2.threshold(image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
 #dilation
 def dilate(image):
@@ -58,22 +57,38 @@ def deskew(image):
 def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
 
+def show(img):
+    cv2.imshow('shapes', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 def get_number(small_image):
 
+    
     num = get_grayscale(small_image)
-    num = opening(num)
+    
     #num = remove_noise(num)
+    num = thresholding(num)
+    
+    
+    
+    
+    num = opening(num)
+    
+    num = erode(num)
+    num = dilate(num)
+    #show(num)
+    #show(num)
+    
+
     custom_config = r'--oem 3 --psm 6 outputbase digits'
     return pytesseract.image_to_string(num, config=custom_config)[0]
 
 
 
-def image_input(path):
+def input_puzzle(img):
 
     problem_grid = np.zeros([9,9])
-
-    img = cv2.imread(path)
     
     width = len(img)//9
     size = len(img)
@@ -89,7 +104,7 @@ def image_input(path):
                     problem_grid[r, c] = number
             else:
                 problem_grid[r, c] = 0
-    print(problem_grid)
+
     return problem_grid
 
 
@@ -98,48 +113,28 @@ def image_input2(path):
 
     img = cv2.imread(path)
     imgGry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    imgGry = cv2.medianBlur(imgGry,5)
+    #imgGry = thresholding(imgGry)
+    #imgGry = remove_noise(imgGry)
+    imgGry = opening(imgGry)
+    #imgGry = cv2.medianBlur(imgGry,5)
 
-    _ , thrash = cv2.threshold(imgGry, 240 , 255, cv2.CHAIN_APPROX_NONE)
+    _ , thrash = cv2.threshold(imgGry, 127 , 255, cv2.CHAIN_APPROX_NONE)
     contours , _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-    dx = 0
-    dy = 0
-
-    print(len(imgGry))
-    m = len(imgGry)//9-3
-    n = len(imgGry)-m
     for contour in contours:
         approx = cv2.approxPolyDP(contour, 0.01* cv2.arcLength(contour, True), True)
-        x = approx.ravel()[0]
-        y = approx.ravel()[1] 
-
+       
         perimeter = cv2.arcLength(contour,True)
-        print(perimeter)
         
-        if len(approx) == 4 and perimeter < 700 and perimeter > 200:
+        if  perimeter > 900:
             x, y , w, h = cv2.boundingRect(approx)
-            aspectRatio = float(w)/h
-            #print(aspectRatio)
-            cv2.drawContours(img, [approx], 0, (0, 0, 255), 1)
+            #cv2.putText(img, 'HERE', (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
+            puzzle = img[y:y+h, x:x+w]
+            problem_grid = input_puzzle(puzzle)
+            cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
             
             
-            if aspectRatio >= 0.94 and aspectRatio < 1.03:
-                num = img[n-y:n-y+m, n-x:n-x+m]
-                number = get_number(num)
-                cv2.putText(img, number, (n-x, n-y+60), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
             
-                if number in possible_characters:
-                    problem_grid[dy, dx] = number
-                else:
-                    problem_grid[dy, dx] = 0
-                dx += 1
-
-                if dx % 9 == 0 and dx != 0:
-                    dy += 1
-                    dx = 0
-                    if dy == 9:
-                        break
     print(problem_grid)
     cv2.imshow('shapes', img)
     cv2.waitKey(0)
@@ -160,4 +155,4 @@ def image_input2(path):
     # print(d['text'])
 
 if __name__ == '__main__':
-    grid = image_input2('puzzle2.PNG')
+    grid = image_input2('puzzle.PNG')

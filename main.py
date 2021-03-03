@@ -44,9 +44,11 @@ if __name__ == "__main__":
         [0,0,0, 0,0,0, 0,2,8],
         [0,9,0, 0,0,0, 0,0,3],
         ])
-    img = 'puzzle3.png'
+
+    img = 'puzzle.png'  
     problem_grid = image_input(img)
 
+    print(problem_grid)
     population_total = 200
     mutation_rate = 0.45
     crossover_rate = 1
