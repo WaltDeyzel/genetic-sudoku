@@ -5,6 +5,8 @@ from cv2 import cv2 # This is the OpenCV Python library
 import pytesseract # This is the TesseractOCR Python library# Set Tesseract CMD path to the location of tesseract.exe file
 from pytesseract import Output
 
+from digit import Digit
+
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 possible_characters = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
@@ -64,22 +66,13 @@ def show(img):
 
 def get_number(small_image):
 
-    
     num = get_grayscale(small_image)
-    
     #num = remove_noise(num)
     num = thresholding(num)
-    
-    
-    
-    
     num = opening(num)
-    
     num = erode(num)
     num = dilate(num)
     #show(num)
-    #show(num)
-    
 
     custom_config = r'--oem 3 --psm 6 outputbase digits'
     return pytesseract.image_to_string(num, config=custom_config)[0]
@@ -89,7 +82,8 @@ def get_number(small_image):
 def input_puzzle(img):
 
     problem_grid = np.zeros([9,9])
-    
+    digits = []
+
     width = len(img)//9
     size = len(img)
     for row in range(9):
@@ -100,15 +94,16 @@ def input_puzzle(img):
             c = int(100*(col*width)/(11*size))
 
             number = get_number(num)
+            digits.append(Digit(num, number))
             if number in possible_characters:
                     problem_grid[r, c] = number
             else:
                 problem_grid[r, c] = 0
 
-    return problem_grid
+    return problem_grid, digits
 
 
-def image_input2(path):
+def image_input(path):
     problem_grid = np.zeros([9,9])
 
     img = cv2.imread(path)
@@ -130,12 +125,11 @@ def image_input2(path):
             x, y , w, h = cv2.boundingRect(approx)
             #cv2.putText(img, 'HERE', (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
             puzzle = img[y:y+h, x:x+w]
-            problem_grid = input_puzzle(puzzle)
-            cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
+            #problem_grid = input_puzzle(puzzle)
+            #cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
+            return puzzle
             
             
-            
-    print(problem_grid)
     cv2.imshow('shapes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
@@ -155,4 +149,4 @@ def image_input2(path):
     # print(d['text'])
 
 if __name__ == '__main__':
-    grid = image_input2('puzzle.PNG')
+    grid = image_input('puzzle.PNG')

@@ -4,11 +4,11 @@ from generate import generate
 from Genome import Genome
 from Selection import tournamentSelection
 from Crossover import crossover
-from inputSudoku import image_input
+from inputSudoku import image_input, input_puzzle
 from outputSudoku import image_output
 import time
 import operator
-
+from cv2 import cv2
 t = round(time.time())
 print(t)
 np.random.seed(t)
@@ -46,8 +46,12 @@ if __name__ == "__main__":
         ])
 
     img = 'puzzle.png'  
-    problem_grid = image_input(img)
-
+    puzzle_img = image_input(img)
+    cv2.imshow('shapes', puzzle_img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    problem_grid, digits = input_puzzle(puzzle_img)
+    
     print(problem_grid)
     population_total = 200
     mutation_rate = 0.45
@@ -73,7 +77,7 @@ if __name__ == "__main__":
 
         if i%100 == 0:
             show(i)
-            #image_output(img, best_genome.getDNA())
+            image_output(puzzle_img, best_genome.getDNA(), digits)
             
         if round(1/best_genome.getFitness()) <= 1:
             print('Done')
@@ -97,5 +101,5 @@ if __name__ == "__main__":
             population.append(new_genome)
         
     show(i)
-    image_output(img, best_genome.getDNA())
+    image_output(puzzle_img, best_genome.getDNA(), digits)
      
