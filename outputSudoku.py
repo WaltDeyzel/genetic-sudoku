@@ -36,8 +36,9 @@ def image_output(image, gird, digits):
             if num == -1:
                 cv2.putText(image, str(number), (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
             else:
-                m = 55
-                image[y:y+m, x:x+m] = num.getNumImg()[:m, :m]
+                cut = 10
+                m = len(num.getNumImg()) - cut+3
+                image[y+cut:y+m, x+cut:x+m] = num.getNumImg()[cut:m, +cut:m]
                 
                 #     cv2.imshow('shapes', image[x:x+m, y:y+m])
                 #     cv2.waitKey(0)

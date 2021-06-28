@@ -120,14 +120,19 @@ def image_input(path):
         approx = cv2.approxPolyDP(contour, 0.01* cv2.arcLength(contour, True), True)
        
         perimeter = cv2.arcLength(contour,True)
+        print(perimeter)
         
         if  perimeter > 900:
             x, y , w, h = cv2.boundingRect(approx)
             #cv2.putText(img, 'HERE', (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
             puzzle = img[y:y+h, x:x+w]
             #problem_grid = input_puzzle(puzzle)
-            #cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
+            cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
             return puzzle
+        
+        else:
+            print('Return original image')
+            return img
             
             
     cv2.imshow('shapes', img)

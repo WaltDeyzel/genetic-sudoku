@@ -31,6 +31,7 @@ def show(i):
     print('---------------------------------------------')
 
 if __name__ == "__main__":
+    # Manual grid imput method
     problem_grid = np.array([
         [4,0,0, 6,0,0, 3,0,0],
         [0,0,2, 8,0,0, 4,0,0],
@@ -44,16 +45,20 @@ if __name__ == "__main__":
         [0,0,0, 0,0,0, 0,2,8],
         [0,9,0, 0,0,0, 0,0,3],
         ])
-
+    # Name of puzzle image 
     img = 'puzzle.png'  
+    # Locate Sudoku grid and return only the grid
     puzzle_img = image_input(img)
     cv2.imshow('shapes', puzzle_img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    # Use puzzle image to automatically fill in the problem_grid and also return copies of the digit images.
     problem_grid, digits = input_puzzle(puzzle_img)
     
     print(problem_grid)
-    population_total = 200
+
+    # Input parameters
+    population_total = 250
     mutation_rate = 0.45
     crossover_rate = 1
     simulations = 100 * 1000
@@ -61,10 +66,11 @@ if __name__ == "__main__":
     population = []
     best_genome = None
 
+    # Fill population list
     for _ in range(population_total):
         genome_dna = generate(problem_grid)
         population.append(Genome(genome_dna))
-        
+    # Run generations starting at Gen: 0   
     for i in range(simulations):
         population_fitness = 0
         
@@ -75,7 +81,7 @@ if __name__ == "__main__":
         sorted_population = population.copy()
         best_genome = max(population, key=operator.attrgetter('fit'))
 
-        if i%100 == 0:
+        if i%1000 == 0:
             show(i)
             image_output(puzzle_img, best_genome.getDNA(), digits)
             
