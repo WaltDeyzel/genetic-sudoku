@@ -46,7 +46,7 @@ if __name__ == "__main__":
         [0,9,0, 0,0,0, 0,0,3],
         ])
     # Name of puzzle image 
-    img = 'p2.jpg'  
+    img = 'images/p2.jpg'  
     # Locate Sudoku grid and return only the grid
     puzzle_img = image_input(img)
     cv2.imshow('shapes', puzzle_img)
