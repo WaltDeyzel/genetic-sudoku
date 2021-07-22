@@ -46,7 +46,7 @@ if __name__ == "__main__":
         [0,9,0, 0,0,0, 0,0,3],
         ])
     # Name of puzzle image 
-    img = 'puzzle.png'  
+    img = 'p2.jpg'  
     # Locate Sudoku grid and return only the grid
     puzzle_img = image_input(img)
     cv2.imshow('shapes', puzzle_img)
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     print(problem_grid)
 
     # Input parameters
-    population_total = 250
+    population_total = 1000
     mutation_rate = 0.45
     crossover_rate = 1
     simulations = 100 * 1000

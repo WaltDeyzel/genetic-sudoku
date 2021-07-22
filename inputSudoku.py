@@ -61,21 +61,24 @@ def match_template(image, template):
 
 def show(img):
     cv2.imshow('shapes', img)
-    cv2.waitKey(0)
+    cv2.waitKey(300)
     cv2.destroyAllWindows()
 
 def get_number(small_image):
-
+    
     num = get_grayscale(small_image)
     #num = remove_noise(num)
-    num = thresholding(num)
-    num = opening(num)
-    num = erode(num)
-    num = dilate(num)
-    #show(num)
-
+    #num = thresholding(num)
+    #num = opening(num)
+    #num = erode(num)
+    #num = dilate(num)
+    thresh = 127
+    im_bw = cv2.threshold(num, thresh, 255, cv2.THRESH_BINARY)[1]
+    im_bw = 255-im_bw
+    #show(im_bw)
+    num = small_image
     custom_config = r'--oem 3 --psm 6 outputbase digits'
-    return pytesseract.image_to_string(num, config=custom_config)[0]
+    return pytesseract.image_to_string(num, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')[0]
 
 
 
@@ -88,13 +91,17 @@ def input_puzzle(img):
     size = len(img)
     for row in range(9):
         for col in range(9):
-
+            # Cut c pixels from surrounding Border
+            c = 5
+            num = img[row*width+c:row*width+width-c, col*width+c:col*width+width-c]
+            number = get_number(num)
+            
             num = img[row*width:row*width+width, col*width:col*width+width]
+            digits.append(Digit(num, number))
+            #print(number)
             r = int(100*(row*width)/(11*size))
             c = int(100*(col*width)/(11*size))
-
-            number = get_number(num)
-            digits.append(Digit(num, number))
+            
             if number in possible_characters:
                     problem_grid[r, c] = number
             else:
@@ -108,11 +115,7 @@ def image_input(path):
 
     img = cv2.imread(path)
     imgGry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #imgGry = thresholding(imgGry)
-    #imgGry = remove_noise(imgGry)
-    imgGry = opening(imgGry)
-    #imgGry = cv2.medianBlur(imgGry,5)
-
+    
     _ , thrash = cv2.threshold(imgGry, 127 , 255, cv2.CHAIN_APPROX_NONE)
     contours , _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
@@ -120,13 +123,11 @@ def image_input(path):
         approx = cv2.approxPolyDP(contour, 0.01* cv2.arcLength(contour, True), True)
        
         perimeter = cv2.arcLength(contour,True)
-        print(perimeter)
         
         if  perimeter > 900:
             x, y , w, h = cv2.boundingRect(approx)
-            #cv2.putText(img, 'HERE', (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0))
             puzzle = img[y:y+h, x:x+w]
-            #problem_grid = input_puzzle(puzzle)
+            # Return cropped image.
             cv2.drawContours(img, [approx], 0, (0, 143, 255), 1)
             return puzzle
         
@@ -134,24 +135,11 @@ def image_input(path):
             print('Return original image')
             return img
             
-            
-    cv2.imshow('shapes', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     return problem_grid
 
 
-
-    #img = thresholding(img)
-    # Adding custom options
-    # custom_config = r'--oem 3 --psm 6'
-    # print(pytesseract.image_to_string(img, config=custom_config))
-
-    # custom_config = r'--oem 3 --psm 6 outputbase digits'
-    # print(pytesseract.image_to_string(img, config=custom_config)[0])
-
-    # d = pytesseract.image_to_data(img, output_type=Output.DICT)
-    # print(d['text'])
-
 if __name__ == '__main__':
-    grid = image_input('puzzle.PNG')
+    grid_image = image_input('p2.jpg') # This returns either a cropped image or the original.
+    grid, digits = input_puzzle(grid_image)
+    print(grid)
+   
