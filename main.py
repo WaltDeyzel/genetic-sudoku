@@ -81,6 +81,7 @@ if __name__ == "__main__":
         sorted_population = population.copy()
         best_genome = max(population, key=operator.attrgetter('fit'))
 
+        # Show progress every X itterations
         if i%1000 == 0:
             show(i)
             image_output(puzzle_img, best_genome.getDNA(), digits)
