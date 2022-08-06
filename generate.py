@@ -65,8 +65,6 @@ def checkForErrorInGrid(problem_grid):
     # This function returns the coordinates of numbers that appear in the same row and/or column
     # Coordinates of the numbers that are in the same row or column
     coordinates = []
-    # Index of error for coordinates
-    idxError = 0;
 
     for r in range(9):
         for c in range(9):
