@@ -20,12 +20,10 @@ def show(i):
     dna = best_genome.getDNA()
     n = 1
     for row in dna:
-        print(row[0:3], row[3:6], row[6:9])
+        print(row[0:3], row[3:6], row[6:9], "|", best_genome.col_sum[n-1])
         if n % 3 == 0:
             print()
         n+=1
-    print()
-    print(best_genome.col_sum)
     print(best_genome.row_sum)
     print()
     print('---------------------------------------------')
