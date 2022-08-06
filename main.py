@@ -75,10 +75,14 @@ if __name__ == "__main__":
         population_fitness = 0
         
         for genome in population:
+            # Calculate the fitness of each Genome
             genome.fitness()
+            # Get the fitness value of the Genome
             population_fitness += genome.getFitness()
 
+        # Create a copy of the existing population
         sorted_population = population.copy()
+        # Get the fittest Genome out of the current population
         best_genome = max(population, key=operator.attrgetter('fit'))
 
         # Show progress every X itterations
@@ -90,22 +94,24 @@ if __name__ == "__main__":
             print('Done')
             break
         population.clear()
+        # Transfer fittest Genome from current generation to the next generation
         population.append(best_genome)
         
+        # Fill the new population to meet population_total
         while len(population) < population_total:
 
-            new_genome = tournamentSelection(sorted_population)
-            option_2 = tournamentSelection(sorted_population)
+            genome_1 = tournamentSelection(sorted_population)
+            genome_2 = tournamentSelection(sorted_population)
 
             if npR.uniform() < crossover_rate:
-                option_3 = tournamentSelection(sorted_population)
-                dna_1 = crossover(new_genome, option_2, option_3)
-                new_genome = Genome(dna_1)
+                genome_3 = tournamentSelection(sorted_population)
+                dna_1 = crossover(genome_1, genome_2, genome_3)
+                genome_1 = Genome(dna_1)
 
             if npR.uniform() < mutation_rate:
-                new_genome.mutate(problem_grid)
+                genome_1.mutate(problem_grid)
 
-            population.append(new_genome)
+            population.append(genome_1)
         
     show(i)
     image_output(puzzle_img, best_genome.getDNA(), digits)
