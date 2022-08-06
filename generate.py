@@ -60,3 +60,68 @@ def populateSquare(grid):
                 # Remove val from options
                 options.remove(val)
     return square
+
+def checkForErrorInGrid(problem_grid):
+    # This function returns the coordinates of numbers that appear in the same row and/or column
+    # Coordinates of the numbers that are in the same row or column
+    coordinates = np.zeros((81,2), dtype=np.int) 
+    # Index of error for coordinates
+    idxError = 0;
+
+    for r in range(9):
+        for c in range(9):
+            # Current number at coordinate [r,c]
+            value_1 = problem_grid[r,c]
+            if value_1 == 0:
+                continue
+            # Check row
+            for idx in range(9):
+                # Do not compare to itself
+                if c != idx:
+                    # Number at coordinate [r, idx]
+                    value_2 = problem_grid[r, idx]
+                    # Skip zeros
+                    if value_2 == 0:
+                        continue
+                    # If the numbers are the same an error
+                    if value_1 == value_2:  
+                        # Store [c, r]  {NOT! [r, c] because c -> x and r -> y} in coordinates
+                        coordinates[idxError] = np.array([c, r], dtype=np.int)
+                        idxError += 1
+                        continue
+                    
+            # Check column
+            for idy in range(9):
+                # Do not compare to itself
+                if r != idy:
+                    value_2 = problem_grid[idy, c]
+                    # Skip zeros
+                    if value_2 == 0:
+                        continue
+                    # If the numbers are the same an error
+                    if value_1 == value_2:  
+                        # Store [c, r]  {NOT! [r, c] because c -> x and r -> y} in coordinates
+                        coordinates[idxError] = np.array([c, r], dtype=np.int)
+                        idxError += 1
+                        continue
+    # Doubles can occur when number is in the same row and in the same column
+    # find unique coordinates [r, c]
+    uniqueCoordinates = np.unique(coordinates, axis=0)
+    return uniqueCoordinates
+            
+if __name__ == '__main__':
+    problem_grid = np.array([
+    [1,0,0, 0,0,0, 0,0,0],
+    [0,2,0, 0,0,0, 0,0,0],
+    [0,0,0, 0,3,0, 0,3,0],
+
+    [0,0,0, 0,0,0, 0,0,0],
+    [0,2,0, 0,0,0, 0,0,0],
+    [0,0,0, 0,4,4, 4,0,0],
+
+    [1,0,0, 0,0,0, 0,0,0],
+    [0,2,0, 0,0,0, 0,0,0],
+    [0,0,0, 0,0,0, 0,0,0],
+    ])
+     
+    checkForErrorInGrid(problem_grid)
