@@ -64,7 +64,7 @@ def populateSquare(grid):
 def checkForErrorInGrid(problem_grid):
     # This function returns the coordinates of numbers that appear in the same row and/or column
     # Coordinates of the numbers that are in the same row or column
-    coordinates = np.zeros((81,2), dtype=np.int) 
+    coordinates = []
     # Index of error for coordinates
     idxError = 0;
 
@@ -86,8 +86,7 @@ def checkForErrorInGrid(problem_grid):
                     # If the numbers are the same an error
                     if value_1 == value_2:  
                         # Store [c, r]  {NOT! [r, c] because c -> x and r -> y} in coordinates
-                        coordinates[idxError] = np.array([c, r], dtype=np.int)
-                        idxError += 1
+                        coordinates.append([c, r])
                         continue
                     
             # Check column
@@ -101,8 +100,7 @@ def checkForErrorInGrid(problem_grid):
                     # If the numbers are the same an error
                     if value_1 == value_2:  
                         # Store [c, r]  {NOT! [r, c] because c -> x and r -> y} in coordinates
-                        coordinates[idxError] = np.array([c, r], dtype=np.int)
-                        idxError += 1
+                        coordinates.append([c, r])
                         continue
     # Doubles can occur when number is in the same row and in the same column
     # find unique coordinates [r, c]
@@ -111,7 +109,7 @@ def checkForErrorInGrid(problem_grid):
             
 if __name__ == '__main__':
     problem_grid = np.array([
-    [1,0,0, 0,0,0, 0,0,0],
+    [0,0,0, 0,0,0, 0,0,0],
     [0,2,0, 0,0,0, 0,0,0],
     [0,0,0, 0,3,0, 0,3,0],
 
@@ -121,7 +119,7 @@ if __name__ == '__main__':
 
     [1,0,0, 0,0,0, 0,0,0],
     [0,2,0, 0,0,0, 0,0,0],
-    [0,0,0, 0,0,0, 0,0,0],
+    [1,0,0, 0,0,0, 0,0,0],
     ])
      
-    checkForErrorInGrid(problem_grid)
+    print(checkForErrorInGrid(problem_grid))
