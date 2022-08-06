@@ -56,30 +56,30 @@ if __name__ == "__main__":
     print(problem_grid)
 
     # Input parameters
-    population_total = 1000
+    population_total = 5
     mutation_rate = 0.45
     crossover_rate = 1
     simulations = 100 * 1000
 
-    population = []
+    population = np.ndarray(population_total, dtype=Genome)
     best_genome = None
 
     # Fill population list
-    for _ in range(population_total):
+    for ipop in range(population_total):
         genome_dna = generate(problem_grid)
-        population.append(Genome(genome_dna))
+        population[ipop] = Genome(genome_dna)
     # Run generations starting at Gen: 0   
     for i in range(simulations):
         population_fitness = 0
         
-        for genome in population:
+        for ipop in range(population_total):
             # Calculate the fitness of each Genome
-            genome.fitness()
+            population[ipop].fitness()
             # Get the fitness value of the Genome
-            population_fitness += genome.getFitness()
+            population_fitness += population[ipop].getFitness()
 
         # Create a copy of the existing population
-        sorted_population = population.copy()
+        old_population = population.copy()
         # Get the fittest Genome out of the current population
         best_genome = max(population, key=operator.attrgetter('fit'))
 
@@ -91,25 +91,27 @@ if __name__ == "__main__":
         if round(1/best_genome.getFitness()) <= 1:
             print('Done')
             break
-        population.clear()
-        # Transfer fittest Genome from current generation to the next generation
-        population.append(best_genome)
         
+        population = np.ndarray(population_total, dtype=Genome)
+        # Transfer fittest Genome from current generation to the next generation
+        population[0] = best_genome
+        idx = 1
         # Fill the new population to meet population_total
-        while len(population) < population_total:
+        while idx < population_total:
 
-            genome_1 = tournamentSelection(sorted_population)
-            genome_2 = tournamentSelection(sorted_population)
+            genome_1 = tournamentSelection(old_population)
+            genome_2 = tournamentSelection(old_population)
 
             if npR.uniform() < crossover_rate:
-                genome_3 = tournamentSelection(sorted_population)
+                genome_3 = tournamentSelection(old_population)
                 dna_1 = crossover(genome_1, genome_2, genome_3)
                 genome_1 = Genome(dna_1)
 
             if npR.uniform() < mutation_rate:
                 genome_1.mutate(problem_grid)
 
-            population.append(genome_1)
+            population[idx] = genome_1
+            idx += 1
         
     show(i)
     image_output(puzzle_img, best_genome.getDNA(), digits)
