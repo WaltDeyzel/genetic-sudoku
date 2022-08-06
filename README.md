@@ -48,13 +48,13 @@ problem_grid = np.array([
    
    ## Input image does not have to be cropped perfectly.
    
-   ![input puzzle image](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/p1.jpg)
+   ![input puzzle image](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/images/p1.jpg)
     
    ## Program centers and crops the sudoku puzzle 
     
-   ![crop version](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/p1_crop.jpg) 
+   ![crop version](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/images/p1_crop.jpg) 
      
    ## Genetic algorithm solves the Sudoku puzzle.
    
-   ![solution](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/solution.jpg) 
+   ![solution](https://github.com/WaltDeyzel/genetic-sudoku/blob/master/images/solution.jpg) 
    
